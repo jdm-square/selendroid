@@ -43,8 +43,8 @@ jar {
 
     into('prebuild') {
         from {
-            ['../selendroid-server/build/outputs/apk/selendroid-server-' + rootProject.ext.selVersion + '.apk',
-             '../android-driver/build/outputs/apk/android-driver-app-' + rootProject.ext.selVersion + '.apk']
+            ['../selendroid-server/build/outputs/apk/debug/selendroid-server-' + rootProject.ext.selVersion + '.apk',
+             '../android-driver/build/outputs/apk/debug/android-driver-app-' + rootProject.ext.selVersion + '.apk']
         }
     }
 
@@ -70,8 +70,8 @@ task jarWithoutDependencies(type: Jar) {
 
   into('prebuild') {
       from {
-          ['../selendroid-server/build/outputs/apk/selendroid-server-' + rootProject.ext.selVersion + '.apk',
-           '../android-driver/build/outputs/apk/android-driver-app-' + rootProject.ext.selVersion + '.apk']
+          ['../selendroid-server/build/outputs/apk/debug/selendroid-server-' + rootProject.ext.selVersion + '.apk',
+           '../android-driver/build/outputs/apk/debug/android-driver-app-' + rootProject.ext.selVersion + '.apk']
       }
   }
 
