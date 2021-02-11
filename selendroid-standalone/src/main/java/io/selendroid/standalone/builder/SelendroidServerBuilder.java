@@ -1,11 +1,11 @@
 /*
  * Copyright 2012-2014 eBay Software Foundation and selendroid committers.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -147,6 +147,8 @@ public class SelendroidServerBuilder {
     deleteFileFromAppSilently(app, "META-INF/ANDROIDD.RSA");
     deleteFileFromAppSilently(app, "META-INF/NDKEYSTO.SF");
     deleteFileFromAppSilently(app, "META-INF/NDKEYSTO.RSA");
+    deleteFileFromAppSilently(app, "META-INF/BNDLTOOL.SF");
+    deleteFileFromAppSilently(app, "META-INF/BNDLTOOL.RSA");
 
     File outputFile = File.createTempFile("resigned-", appFile.getName());
     if (deleteTmpFiles()) {
@@ -235,12 +237,14 @@ public class SelendroidServerBuilder {
     finalSelendroidServer.putArchiveEntry(binaryManifestXml);
     IOUtils.copy(manifestApk.getInputStream(binaryManifestXml), finalSelendroidServer);
 
+    log.info("XXXjdm: abs path: " + selendroidServer.getAbsolutePath());
     ZipFile selendroidPrebuildApk = new ZipFile(selendroidServer.getAbsolutePath());
     Enumeration<ZipArchiveEntry> entries = selendroidPrebuildApk.getEntries();
     for (; entries.hasMoreElements(); ) {
       ZipArchiveEntry dd = entries.nextElement();
       finalSelendroidServer.putArchiveEntry(dd);
 
+      log.info("XXXjdm: copying: " + dd.getName());
       IOUtils.copy(selendroidPrebuildApk.getInputStream(dd), finalSelendroidServer);
     }
 
