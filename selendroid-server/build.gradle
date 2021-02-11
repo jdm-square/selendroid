@@ -29,7 +29,7 @@ android {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
+            assets.srcDirs = ['assets', 'asserts/inspector']
         }
     }
 
