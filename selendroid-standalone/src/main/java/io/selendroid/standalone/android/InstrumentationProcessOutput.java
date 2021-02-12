@@ -15,7 +15,14 @@ package io.selendroid.standalone.android;
 
 import com.google.common.base.Function;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import io.selendroid.server.common.exceptions.AppCrashedException;
@@ -157,12 +164,21 @@ public class InstrumentationProcessOutput {
   public static final SelendroidException getInstrumentationProcessError(
     InstrumentationProcessOutput instrumentationOutput,
     final AndroidDevice device) {
+    String logcat = null;
+    try {
+      File f = new File(System.getProperty("java.io.tmpdir"), "logcat-" + UUID.randomUUID().toString());
+      FileUtils.writeLines(f, device.getLogs());
+      logcat = f.getAbsolutePath();
+    } catch (IOException e) {
+      // ignore
+    }
+
     if (instrumentationOutput.isNativeCrash()) {
       return new AppCrashedException(
         INSTRUMENTATION_PROCESS_FAILED_ERROR_MESSAGE +
         ": " +
         instrumentationOutput.getMessage() +
-        "\nSee logcat for more details");
+        "\nSee logcat for more details" + (logcat != null ? " (" + logcat + ")" : ""));
     }
 
     if (instrumentationOutput.isRegularAppCrash()) {
@@ -175,7 +191,7 @@ public class InstrumentationProcessOutput {
         errorMessage = INSTRUMENTATION_PROCESS_FAILED_ERROR_MESSAGE +
           ": " +
           instrumentationOutput.getMessage() + "\n" +
-          CRASH_LOG_TIMEOUT_ERROR_MESSAGE;
+          CRASH_LOG_TIMEOUT_ERROR_MESSAGE + (logcat != null ? " (" + logcat + ")" : "");
       }
 
       return new AppCrashedException(errorMessage);
