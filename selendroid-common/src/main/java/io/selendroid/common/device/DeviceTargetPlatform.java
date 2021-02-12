@@ -17,7 +17,8 @@ public enum DeviceTargetPlatform {
 	  ANDROID10("2.3.3"), ANDROID11("3.0"), ANDROID12("3.1"), ANDROID13("3.2"), ANDROID14("4.0"),
 	  ANDROID15("4.0.3"), ANDROID16("4.1.2"), ANDROID17("4.2.2"), ANDROID18("4.3"), ANDROID19("4.4"),
 	  ANDROID20("4.4"), ANDROID21("5.0"), ANDROID22("5.1"), ANDROID23("6.0"), ANDROID24("7.0"),
-		ANDROID25("7.1"), ANDROID26("8.0"), ANDROID27("8.1");
+		ANDROID25("7.1"), ANDROID26("8.0"), ANDROID27("8.1"), ANDROID28("9.0"), ANDROID29("10.0"),
+    ANDROID30("11.0");
   public static final String ANDROID = "ANDROID";
 
   private String versionNumber;
