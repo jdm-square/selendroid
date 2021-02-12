@@ -17,6 +17,8 @@ import com.android.ddmlib.IDevice;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableMap;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -460,14 +462,22 @@ public class DefaultAndroidEmulator extends AbstractDevice implements AndroidEmu
     log.info("Please have in mind, starting an emulator takes usually about 45 seconds.");
     unlockScreen();
 
-    waitForLauncherToComplete();
+    /*try {
+      TimeUnit.SECONDS.sleep(5);
+    } catch (InterruptedException e) {
+    }*/
+    //waitForLauncherToComplete();
 
     // we observed that emulators can sometimes not be 'fully loaded'
     // if we click on the All Apps button and wait for it to load it is more likely to be in a
     // usable state.
     allAppsGridView();
 
-    waitForLauncherToComplete();
+    /*try {
+      TimeUnit.SECONDS.sleep(5);
+    } catch (InterruptedException e) {
+    }*/
+    //waitForLauncherToComplete();
     setWasStartedBySelendroid(true);
   }
 
