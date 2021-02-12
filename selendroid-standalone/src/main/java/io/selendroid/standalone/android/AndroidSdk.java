@@ -71,7 +71,15 @@ public class AndroidSdk {
   }
 
   public static File emulator() {
-    return new File(toolsHome(), "emulator" + platformExecutableSuffixExe());
+    return new File(emulatorHome(), "emulator" + platformExecutableSuffixExe());
+  }
+
+  private static File emulatorHome() {
+    StringBuffer command = new StringBuffer();
+    command.append(androidHome());
+    command.append(File.separator);
+    command.append("emulator");
+    return new File(command.toString());
   }
 
   private static File toolsHome() {
