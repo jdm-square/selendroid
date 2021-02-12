@@ -96,14 +96,111 @@ public class DefaultAndroidEmulator extends AbstractDevice implements AndroidEmu
     Skin: tv_720p
     Sdcard: 100M
     Snapshot: no*/
+  // ls ../../../platforms/android-30/skins
+  // hw.lcd.width = 320
+  // hw.lcd.height = 640
+  // in /Users/jmatthews/.android/avd/testing4.avd/hardware-qemu.ini
+  // hw.lcd.height=640
+  // hw.lcd.width=320
+  // in /Users/jmatthews/.android/avd/testing4.avd/config.ini
+  // sdk.skin.default=WVGA800 in platforms/android-27/sdk.properties
+  //     device {
+  //        display {
+  //            width   1280
+  //            height  800
+  //            x       0
+  //            y       0
+  //        }
+  //    }
+  // in platforms/android-27/skins/WXGA800/layout
+  //~/Downloads/cmdline-tools/latest/bin:0 cat ../../../system-images/android-27/google_apis/x86/source.properties
+  //Pkg.Desc=System Image x86 with Google APIs.
+  //Pkg.Revision=11
+  //Pkg.Dependencies=emulator#27.1.7
+  //AndroidVersion.ApiLevel=27
+  //SystemImage.Abi=x86
+  //SystemImage.TagId=google_apis
+  //SystemImage.TagDisplay=Google APIs
+  //SystemImage.GpuSupport=true
+  //Addon.VendorId=google
+  //Addon.VendorDisplay=Google Inc.
+  //
+  //image.sysdir.1=system-images/android-27/google_apis/x86/
+  // in /Users/jmatthews/.android/avd/testing4.avd/config.ini
   public DefaultAndroidEmulator(String avdOutput) {
+    log.info("XXXjdm: emulator avd output:" + avdOutput);
     this.avdName = extractValue("Name: (.*?)$", avdOutput);
-    this.screenSize = getScreenSizeFromSkin(extractValue("Skin: (.*?)$", avdOutput));
-    this.targetPlatform = DeviceTargetPlatform.fromInt(extractValue("\\(API level (.*?)\\)", avdOutput));
+    log.info("XXXjdm: creating emulator with avd " + this.avdName);
     this.avdRootFolder = new File(extractValue("Path: (.*?)$", avdOutput));
+    this.targetPlatform = DeviceTargetPlatform.fromInt(extractValue("\\(API level (.*?)\\)", avdOutput));
+    if (this.targetPlatform == null) {
+      this.targetPlatform = DeviceTargetPlatform.fromApiVersion(extractValue("Based on: Android (.*?) \\(", avdOutput));
+      if (this.targetPlatform == null) {
+        throw new IllegalStateException("Couldn't determine target platform from AVD output.");
+      }
+      //this.targetPlatform = getTargetPlatformFromConfig();
+    }
+    this.screenSize = getScreenSizeFromSkin(extractValue("Skin: (.*?)$", avdOutput));
+    if (this.screenSize == null) {
+      this.screenSize = getScreenSizeFromImage();
+    }
     this.model = extractValue("Device: (.*?)$", avdOutput);
     extractAPITargetType(avdOutput);
   }
+
+  private String getDefaultSkinForImage() {
+    File properties = new File(AndroidSdk.findSpecificAndroidPlatformFolder(this.targetPlatform), "sdk.properties");
+    try {
+      List<String> lines = FileUtils.readLines(properties);
+      for (String line : lines) {
+        String[] parts = line.split("=");
+        if (parts[0].equals("sdk.skin.default")) {
+          return parts[1];
+        }
+      }
+      return null;
+    } catch(IOException e) {
+      return null;
+    }
+  }
+
+  private Dimension getScreenSizeFromImage() {
+    String defaultSkin = getDefaultSkinForImage();
+    return getScreenSizeFromSkin(defaultSkin);
+    /*File f = new File(AndroidSdk.findSpecificAndroidPlatformFolder(this.targetPlatform), "skins");
+    f = new File(f, defaultSkin);
+    f = new File(f, "layout");
+    try {
+      String layoutContents = FileUtils.readFileToString(f);
+      String s = extractValue();
+    } catch (IOException e) {
+      return null;
+    }*/
+  }
+
+  private String getImageSysdir() {
+    File config = new File(avdRootFolder, "config.ini");
+    try {
+      List<String> contents = FileUtils.readLines(config);
+      for (String line : contents) {
+        String[] parts = line.split("=");
+        if (parts[0] == "image.sysdir") {
+          return parts[1];
+        }
+      }
+      return null;
+    } catch (IOException e) {
+      return null;
+    }
+  }
+
+  /*private DeviceTargetPlatform getTargetPlatformFromConfig() {
+    String[] sysdir = getImageSysdir().split("/");
+    if (sysdir[0] != "system-images") {
+      return null;
+    }
+    return
+  }*/
 
   private void extractAPITargetType(String avdOutput) {
     String target = extractValue("Target: (.*?)$", avdOutput);

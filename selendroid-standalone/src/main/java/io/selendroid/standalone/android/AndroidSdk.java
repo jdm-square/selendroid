@@ -13,6 +13,7 @@
  */
 package io.selendroid.standalone.android;
 
+import io.selendroid.common.device.DeviceTargetPlatform;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
@@ -138,6 +139,19 @@ public class AndroidSdk {
 
   public static File findLatestAndroidPlatformFolder() {
     return findLatestAndroidPlatformFolder(platformsFolder());
+  }
+
+  public static File findSpecificAndroidPlatformFolder(DeviceTargetPlatform platform) {
+    File[] platformVersions = platformsFolder().listFiles(new FileFilter() {
+      @Override
+      public boolean accept(File file) {
+        return file.getName().equals("android-" + platform.getApi());
+      }
+    });
+    if (platformVersions == null || platformVersions.length == 0) {
+      throw new SelendroidException("No valid Android platform folder found in " + platformsFolder().getName());
+    }
+    return platformVersions[0];
   }
 
   public static File findLatestAndroidPlatformFolder(File platformsFolder) {

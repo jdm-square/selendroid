@@ -33,6 +33,18 @@ public enum DeviceTargetPlatform {
     return name().replace(ANDROID, "android-");
   }
 
+  public static DeviceTargetPlatform fromApiVersion(String text) {
+    if (text != null) {
+      for (DeviceTargetPlatform b : DeviceTargetPlatform.values()) {
+        //System.out.println("checking " + b.api + " against " + text);
+        if (b.versionNumber.equals(text)) {
+          return b;
+        }
+      }
+    }
+    return null;
+  }
+
   public static DeviceTargetPlatform fromPlatformVersion(String text) {
     if (text != null) {
       for (DeviceTargetPlatform b : DeviceTargetPlatform.values()) {
