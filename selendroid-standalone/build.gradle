@@ -1,6 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
+repositories {
+    google()
+}
+
 dependencies {
     compile project(':selendroid-common')
     compile project(':selendroid-server-common')

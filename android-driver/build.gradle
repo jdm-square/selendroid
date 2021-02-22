@@ -1,10 +1,11 @@
 buildscript {
     repositories {
+        google()
         jcenter()
     }
     dependencies {
         classpath rootProject.ext.androidBuildToolsGradle
-        classpath rootProject.ext.sdkManager
+        //classpath rootProject.ext.sdkManager
     }
 }
 
