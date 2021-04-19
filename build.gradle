@@ -26,6 +26,7 @@ task printVersion {
 allprojects {
     repositories {
         jcenter()
+        google()
     }
 
     version = selVersion
