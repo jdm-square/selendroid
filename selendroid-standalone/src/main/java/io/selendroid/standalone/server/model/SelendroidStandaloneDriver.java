@@ -462,6 +462,7 @@ public class SelendroidStandaloneDriver
       Locale locale = parseLocale(desiredCapabilities);
       emulator.start(locale, deviceStore.nextEmulatorPort(), config);
     }
+    log.info("XXXjdm: trying to set emulator's device based on " + emulator.getAvdName());
     emulator.setIDevice(deviceManager.getVirtualDevice(emulator.getAvdName()));
   }
 

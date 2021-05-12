@@ -13,6 +13,8 @@
  */
 package io.selendroid.standalone.builder;
 
+import io.selendroid.standalone.server.SelendroidStandaloneServer;
+import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -21,15 +23,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class AndroidDriverAPKBuilder {
+  private static final Logger log = Logger.getLogger(AndroidDriverAPKBuilder.class.getName());
 
   private static final String PREBUILD_WEBVIEW_APP_PATH_PREFIX = "/prebuild/android-driver-app-";
 
   public File extractAndroidDriverAPK() {
     InputStream is = AndroidDriverAPKBuilder.class.getResourceAsStream(PREBUILD_WEBVIEW_APP_PATH_PREFIX +
         SelendroidServerBuilder.getJarVersionNumber() + ".apk");
+    log.info("XXXjdm: " + (is != null ? is.toString() : "null"));
 
     try {
       File tmpAndroidDriver = File.createTempFile("android-driver", ".apk");
+      log.info("XXXjdm2:" + tmpAndroidDriver.getAbsolutePath());
       IOUtils.copy(is, new FileOutputStream(tmpAndroidDriver));
       IOUtils.closeQuietly(is);
       return tmpAndroidDriver;

@@ -1,11 +1,11 @@
 /*
  * Copyright 2012-2014 eBay Software Foundation and selendroid committers.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -127,9 +127,11 @@ public class DefaultDeviceManager extends Thread implements IDeviceChangeListene
 
   @Override
   public void deviceConnected(IDevice device) {
+    log.info("XXXjdm: device connected ");
     if (device == null) {
       return;
     }
+    log.info("XXXjdm: connected: " + device.toString());
     if (device.isEmulator()) {
       String serial = device.getSerialNumber();
       Integer port = Integer.parseInt(serial.replace("emulator-", ""));
@@ -146,6 +148,8 @@ public class DefaultDeviceManager extends Thread implements IDeviceChangeListene
           client.close();
         }
       }
+      //avdName = device.getAvdName();
+      log.info("XXXjdm: associating " + avdName + " with " + device.toString());
       virtualDevices.put(avdName, device);
       for (AndroidEmulatorPowerStateListener listener : emulatorPowerStateListener) {
         listener.onDeviceStarted(avdName, device.getSerialNumber());

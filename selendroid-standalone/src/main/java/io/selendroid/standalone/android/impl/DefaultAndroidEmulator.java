@@ -315,6 +315,7 @@ public class DefaultAndroidEmulator extends AbstractDevice implements AndroidEmu
         try {
           client = new TelnetClient(port);
           String avdName = client.sendCommand("avd name");
+          log.info("XXXjdm: mapping " + avdName + "to " + port.toString());
           mapping.put(avdName, port);
         } catch (AndroidDeviceException e) {
           log.log(Level.WARNING, "Failed to lookup name for " + port, e);
@@ -622,6 +623,7 @@ public class DefaultAndroidEmulator extends AbstractDevice implements AndroidEmu
 
   @Override
   public void setIDevice(IDevice iDevice) {
+    log.info("XXXjdm: setting device to " + (iDevice != null ? iDevice.toString() : "null"));
     super.device = iDevice;
   }
 

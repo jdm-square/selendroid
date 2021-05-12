@@ -290,6 +290,7 @@ public abstract class AbstractDevice implements AndroidDevice {
       argList.add("io.selendroid." + aut.getBasePackage() + "/io.selendroid.server.SelendroidInstrumentation");
     }
 
+    log.info("XXXjdm hello2");
     runInstrumentCommand(argList.toArray(new String[argList.size()]));
 
     localPort = forwardPort(capabilities.getUseRandomLocalPort() ? 0 : port, port);
