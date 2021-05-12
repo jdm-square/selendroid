@@ -62,6 +62,14 @@ public class TelnetClient {
       try {
         String token = FileUtils.readFileToString(tokenFile);
         this.sendQuietly("auth " + token);
+        String result = in.readLine();
+        if (!result.equals("Android Console: type 'help' for a list of commands")) {
+          log.warning("Unexpected auth result: " + result);
+        }
+        String ok = in.readLine();
+        if (!ok.equals("OK")) {
+          log.warning("Expected OK, got " + ok);
+        }
       } catch (IOException e) {
         log.warning("Error reading auth token from " + tokenFile);
       }
