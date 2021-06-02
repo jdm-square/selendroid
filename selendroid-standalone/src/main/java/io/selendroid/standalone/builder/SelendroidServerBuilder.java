@@ -335,9 +335,9 @@ public class SelendroidServerBuilder {
    * {@link #init(AndroidApp)} must be called upfront for initialization
    */
   /* package */void cleanUpPrebuildServer() throws ShellCommandException, AndroidSdkException {
-    selendroidServer.deleteFileFromWithinApk("META-INF/CERT.RSA");
-    selendroidServer.deleteFileFromWithinApk("META-INF/CERT.SF");
     selendroidServer.deleteFileFromWithinApk("AndroidManifest.xml");
+    selendroidServer.deleteFileFromWithinApk("META-INF/CERT.RSA");
+    //selendroidServer.deleteFileFromWithinApk("META-INF/CERT.SF");
   }
 
   /**
